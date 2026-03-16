@@ -279,24 +279,24 @@ const BANCO_PREGUNTAS = [
         correcta: 3
     },
     {
-        pregunta: "Convertir a TAC: a = b + c + d + e",
+        pregunta: "Convertir a TAC (asociatividad izquierda): a = b + c + d + e",
         opciones: [
             "t1 = b + c\nt2 = t1 + d\nt3 = t2 + e\na = t3",
-            "t1 = b + c\nt2 = d + e\nt3 = t1 + t2\na = t3",
+            "t1 = d + e\nt2 = c + t1\nt3 = b + t2\na = t3",
             "t1 = b + c + d\nt2 = t1 + e\na = t2",
-            "Cualquiera de las dos primeras (según la asociatividad elegida)"
+            "t1 = b + c\nt2 = d + e\na = t1 + t2"
         ],
-        correcta: 3
+        correcta: 0
     },
     {
-        pregunta: "Convertir a TAC: x = (a > b) && (c < d)",
+        pregunta: "Convertir a TAC (corto-circuito): x = (a > b) && (c < d)",
         opciones: [
             "t1 = a > b\nt2 = c < d\nt3 = t1 && t2\nx = t3",
-            "t1 = a > b\nIfZ t1 Goto L1\nt2 = c < d\nx = t2\nGoto L2\nL1: x = 0\nL2:",
+            "t1 = a > b\nIfZ t1 Goto L1\nt2 = c < d\nx = t2\nGoto L2\nL1: x = 0\nL2: End",
             "t1 = a > b\nt2 = c < d\nx = t1 & t2",
-            "Cualquiera de las dos primeras (evaluación completa o cortocircuito)"
+            "x = (a > b) & (c < d)"
         ],
-        correcta: 3
+        correcta: 1
     },
     {
         pregunta: "Convertir a TAC: val = a == b || a == c",
@@ -394,7 +394,7 @@ const BANCO_PREGUNTAS = [
             "t1 = a + 4\n*(t1) = 5",
             "a.campo = 5",
             "t1 = 5\n*(a + 4) = t1",
-            "*(a + 4) = 5"
+            "*(a + 5) = 4"
         ],
         correcta: 0
     },
@@ -433,8 +433,8 @@ const BANCO_PREGUNTAS = [
     {
         pregunta: "Python: 'if x: print(x)', ¿TAC correcto (considerando truthy)?",
         opciones: [
-            "IfZ x Goto L1\nPushParam x\nLCall _PrintInt\nPopParams 4\nL1:",
-            "t1 = x == 0\nIf t1 Goto L1\nPushParam x\nLCall _PrintInt\nPopParams 4\nL1:",
+            "IfZ x Goto L1\nPushParam x\nLCall _PrintInt\nPopParams 4\nL1:\nEnd",
+            "t1 = x == 0\nIf t1 Goto L1\nPushParam x\nLCall _PrintInt\nPopParams 4\nL1:\nEnd",
             "t1 = bool(x)\nIfZ t1 Goto L1\nPushParam x\nLCall _PrintInt\nPopParams 4\nL1:\nEnd",
             "t1 = x != 0\nIfZ t1 Goto L1\nPushParam x\nLCall _PrintInt\nPopParams 4\nL1:\nEnd"
         ],
@@ -453,8 +453,8 @@ const BANCO_PREGUNTAS = [
     {
         pregunta: "Traducir: if (a > b && c > d) x = 1;",
         opciones: [
-            "t1 = a > b\nt2 = c > d\nt3 = t1 && t2\nIfZ t3 Goto L1\nx = 1\nL1:",
-            "t1 = a > b\nIfZ t1 Goto L1\nt2 = c > d\nIfZ t2 Goto L1\nx = 1\nL1:",
+            "t1 = a > b\nt2 = c > d\nt3 = t1 && t2\nIfZ t3 Goto L1\nx = 1\nL1:\nEnd",
+            "t1 = a > b\nIfZ t1 Goto L1\nt2 = c > d\nIfZ t2 Goto L1\nx = 1\nL1:\nEnd",
             "t1 = a > b\nt2 = c > d\nx = t1 & t2\nIfZ x Goto L1\nx = 1\nL1:\nEnd",
             "t1 = a > b\nIfZ t1 Goto L1\nt2 = c > d\nx = t2\nL1:\nEnd"
         ],
@@ -463,8 +463,8 @@ const BANCO_PREGUNTAS = [
     {
         pregunta: "Traducir: if (a == 1 || b == 2) x = 0;",
         opciones: [
-            "t1 = a == 1\nt2 = b == 2\nt3 = t1 || t2\nIfZ t3 Goto L1\nx = 0\nL1:",
-            "t1 = a == 1\nIf t1 Goto L2\nt2 = b == 2\nIfZ t2 Goto L1\nL2:\nx = 0\nL1:",
+            "t1 = a == 1\nt2 = b == 2\nt3 = t1 || t2\nIfZ t3 Goto L1\nx = 0\nL1:\nEnd",
+            "t1 = a == 1\nIf t1 Goto L2\nt2 = b == 2\nIfZ t2 Goto L1\nL2:\nx = 0\nL1:\nEnd",
             "t1 = a == 1\nt2 = b == 2\nx = t1 | t2\nIfZ x Goto L1\nx = 0\nL1:\nEnd",
             "t1 = a == 1\nIf t1 Goto L2\nt2 = b == 2\nIf t2 Goto L2\nGoto L1\nL2: x = 0\nL1: End"
         ],
@@ -483,10 +483,10 @@ const BANCO_PREGUNTAS = [
     {
         pregunta: "Traducir: if (a) { b = 1; } else if (c) { b = 2; }",
         opciones: [
-            "IfZ a Goto L1\nb = 1\nGoto L2\nL1:\nIfZ c Goto L2\nb = 2\nL2:",
-            "If a Goto L1\nIf c Goto L2\nGoto L3\nL1: b = 1; Goto L3\nL2: b = 2\nL3:",
-            "IfZ a Goto L1\nb = 1\nL1: IfZ c Goto L2\nb = 2\nL2:",
-            "t1 = a\nIfZ t1 Goto L1\nb = 1\nGoto L2\nL1: t2 = c\nIfZ t2 Goto L2\nb = 2\nL2:"
+            "IfZ a Goto L1\nb = 1\nGoto L2\nL1:\nIfZ c Goto L2\nb = 2\nL2:\nEnd",
+            "If a Goto L1\nIf c Goto L2\nGoto L3\nL1: b = 1; Goto L3\nL2: b = 2\nL3:\nEnd",
+            "IfZ a Goto L1\nb = 1\nL1: IfZ c Goto L2\nb = 2\nL2:\nEnd",
+            "t1 = a\nIfZ t1 Goto L1\nb = 1\nGoto L2\nL1: t2 = c\nIfZ t2 Goto L2\nb = 2\nL2:\nEnd"
         ],
         correcta: 3
     },
@@ -513,10 +513,10 @@ const BANCO_PREGUNTAS = [
     {
         pregunta: "Traducir: switch(x) { case 1: y=1; break; }",
         opciones: [
-            "t1 = x == 1\nIfZ t1 Goto L_next\ny = 1\nGoto L_end_switch\nL_next: ...\nL_end_switch:",
-            "If x == 1 Goto L1\nGoto L2\nL1: y = 1\nL2:",
-            "Switch(x)\nCase 1: y = 1\nGoto EndSwitch",
-            "t1 = x\nIf t1 != 1 Goto L1\ny = 1\nGoto L2\nL1: ... L2:"
+            "t1 = x == 1\nIfZ t1 Goto L_next\ny = 1\nGoto L_end_switch\nL_next: ...\nL_end_switch:\nEnd",
+            "If x == 1 Goto L1\nGoto L2\nL1: y = 1\nL2:\nEnd",
+            "Switch(x)\nCase 1: y = 1\nGoto EndSwitch\nEnd",
+            "t1 = x\nIf t1 != 1 Goto L1\ny = 1\nGoto L2\nL1: ... L2:\nEnd"
         ],
         correcta: 0
     },
@@ -573,8 +573,8 @@ const BANCO_PREGUNTAS = [
     {
         pregunta: "Representar un bucle que se ejecuta exactamente 3 veces:",
         opciones: [
-            "i = 0\nL1: t1 = i < 3; IfZ t1 Goto L2; ... i = i + 1; Goto L1; L2:",
-            "i = 3\nL1: IfZ i Goto L2; ... i = i - 1; Goto L1; L2:",
+            "i = 0\nL1: t1 = i < 3; IfZ t1 Goto L2; ... i = i + 1; Goto L1; L2:\nEnd",
+            "i = 3\nL1: IfZ i Goto L2; ... i = i - 1; Goto L1; L2:\nEnd",
             "i = 0\nL1: ... i = i + 1; If i < 3 Goto L1\nEnd",
             "i = 0\nL1: If i == 3 Goto L2\n...\ni = i + 1\nGoto L1\nL2: End"
         ],
@@ -583,8 +583,8 @@ const BANCO_PREGUNTAS = [
     {
         pregunta: "Traducir: if (a == b) { if (c == d) x = 1; }",
         opciones: [
-            "t1 = a == b\nIfZ t1 Goto L1\nt2 = c == d\nIfZ t2 Goto L1\nx = 1\nL1:",
-            "t1 = a == b\nIf t1 Goto L2\nGoto L1\nL2: t2 = c == d; If t2 Goto L3; Goto L1; L3: x = 1\nL1:",
+            "t1 = a == b\nIfZ t1 Goto L1\nt2 = c == d\nIfZ t2 Goto L1\nx = 1\nL1:\nEnd",
+            "t1 = a == b\nIf t1 Goto L2\nGoto L1\nL2: t2 = c == d; If t2 Goto L3; Goto L1; L3: x = 1\nL1:\nEnd",
             "t1 = a == b\nt2 = c == d\nt3 = t1 & t2\nIfZ t3 Goto L1\nx = 1\nL1:\nEnd",
             "t1 = a == b\nIfZ t1 Goto L1\nt2 = c == d\nIf t2 Goto L2\nGoto L1\nL2: x = 1\nL1: End"
         ],
