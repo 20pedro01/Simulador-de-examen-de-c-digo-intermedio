@@ -249,14 +249,14 @@ const BANCO_PREGUNTAS = [
         correcta: 0
     },
     {
-        pregunta: "C: 'float res = (a + b) * (a + b);', ¿cuál es la traducción TAC optimizada?",
+        pregunta: "C: 'float res = (a + b) * (a + b);', ¿cuál es la traducción TAC mecánica?",
         opciones: [
             "t1 = a + b\nt2 = a + b\nt3 = t1 * t2\nres = t3",
             "t1 = a + b\nt2 = t1 * t1\nres = t2",
             "t1 = a * a\nt2 = b * b\nt3 = t1 + t2\nres = t3",
-            "res = t1 * t1 (donde t1 = a + b)"
+            "t1 = a + b\nt2 = a + b\nres = t1 * t2"
         ],
-        correcta: 1
+        correcta: 0
     },
     {
         pregunta: "Convertir a TAC: x = -a + b * -c",
@@ -361,10 +361,10 @@ const BANCO_PREGUNTAS = [
     {
         pregunta: "Convertir a TAC: a = (b + c) * (b + c) - (b + c)",
         opciones: [
+            "t1 = b + c\nt2 = b + c\nt3 = t1 * t2\nt4 = b + c\nt5 = t3 - t4\na = t5",
             "t1 = b + c\nt2 = t1 * t1\nt3 = t2 - t1\na = t3",
             "t1 = b + c\nt2 = t1 + t1\nt3 = t2 - t1\na = t3",
-            "t1 = b + c\nt2 = t1 * t1\nt3 = t2 + t1\na = t3",
-            "t1 = b * c\nt2 = t1 * t1\nt3 = t2 - t1\na = t3"
+            "t2 = b + c\nt1 = t2 * t2\na = t1 - t2"
         ],
         correcta: 0
     },
@@ -553,10 +553,10 @@ const BANCO_PREGUNTAS = [
     {
         pregunta: "Traducir: while (true) { ... }",
         opciones: [
+            "L1:\nt1 = 1\nIfZ t1 Goto L2\n...\nGoto L1\nL2:\nEnd",
             "L1:\n...\nGoto L1",
-            "t1 = 1\nL1:\nIfZ t1 Goto L2\n...\nGoto L1\nL2:",
-            "Goto L1\nL1: ...\nEnd",
-            "t1 = true\nL1: IfZ t1 Goto L2\n...\nGoto L1\nL2: End"
+            "t1 = 1\nL1:\nIfZ t1 Goto L2\n...\nGoto L1\nL2: End",
+            "Goto L1\nL1: ...\nEnd"
         ],
         correcta: 0
     },
@@ -593,8 +593,8 @@ const BANCO_PREGUNTAS = [
     {
         pregunta: "Python: 'while i < len(lista):', ¿TAC correcto?",
         opciones: [
-            "L1:\nPushParam lista\nt1 = LCall _Len\nPopParams 4\nt2 = i < t1\nIfZ t2 Goto L2\n...\nGoto L1\nL2:",
-            "L1:\nt1 = len(lista)\nt2 = i < t1\nIfZ t2 Goto L2\nGoto L1\nL2:",
+            "L1:\nPushParam lista\nt1 = LCall _Len\nPopParams 4\nt2 = i < t1\nIfZ t2 Goto L2\n...\nGoto L1\nL2:\nEnd",
+            "L1:\nt1 = len(lista)\nt2 = i < t1\nIfZ t2 Goto L2\nGoto L1\nL2:\nEnd",
             "PushParam lista\nt1 = LCall _Len\nPopParams 4\nL1: t2 = i < t1; IfZ t2 Goto L2; ...; i = i + 1; Goto L1; L2:\nEnd",
             "L1: t1 = len(lista); t2 = i < t1; IfZ t2 Goto L2; ...; Goto L1; L2: End"
         ],
