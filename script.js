@@ -436,7 +436,7 @@ const BANCO_PREGUNTAS = [
             "IfZ x Goto L1\nPushParam x\nLCall _PrintInt\nPopParams 4\nL1:\nEnd",
             "t1 = x == 0\nIf t1 Goto L1\nPushParam x\nLCall _PrintInt\nPopParams 4\nL1:\nEnd",
             "t1 = bool(x)\nIfZ t1 Goto L1\nPushParam x\nLCall _PrintInt\nPopParams 4\nL1:\nEnd",
-            "t1 = x != 0\nIfZ t1 Goto L1\nPushParam x\nLCall _PrintInt\nPopParams 4\nL1:\nEnd"
+            "t1 = x == 0\nIfZ t1 Goto L_BODY\nGoto L1\nL_BODY: PushParam x; LCall _PrintInt; PopParams 4\nL1: End"
         ],
         correcta: 1
     },
@@ -446,7 +446,7 @@ const BANCO_PREGUNTAS = [
             "i = 0\nL1:\nt1 = i < 5\nIfZ t1 Goto L2\nt2 = suma + i\nsuma = t2\nt3 = i + 1\ni = t3\nGoto L1\nL2:\nEnd",
             "i = 0\nL1:\nt1 = i < 5\nIf t1 Goto L2\nGoto L3\nL2:\nsuma = suma + i\ni = i + 1\nGoto L1\nL3:\nEnd",
             "i = 0\nt1 = i < 5\nL1: IfZ t1 Goto L2\nsuma = suma + i\ni = i + 1\nGoto L1\nL2:\nEnd",
-            "i = 0\nL1: If i >= 5 Goto L2\nsuma = suma + i\ni = i + 1\nGoto L1\nL2:\nEnd"
+            "i = 0\nL1:\nt1 = i < 5\nIf t1 Goto L_BODY\nt2 = i == 5\nIf t2 Goto L_BODY\nGoto L2\nL_BODY: suma = suma + i; i = i + 1; Goto L1\nL2: End"
         ],
         correcta: 0
     },
@@ -516,7 +516,7 @@ const BANCO_PREGUNTAS = [
             "t1 = x == 1\nIfZ t1 Goto L_next\ny = 1\nGoto L_end_switch\nL_next: ...\nL_end_switch:\nEnd",
             "If x == 1 Goto L1\nGoto L2\nL1: y = 1\nL2:\nEnd",
             "Switch(x)\nCase 1: y = 1\nGoto EndSwitch\nEnd",
-            "t1 = x\nIf t1 != 1 Goto L1\ny = 1\nGoto L2\nL1: ... L2:\nEnd"
+            "t1 = x == 1\nIf t1 Goto L2\nGoto L1\nL2: y = 1\nGoto L_END\nL1: ... L_END: End"
         ],
         correcta: 0
     },
@@ -545,7 +545,7 @@ const BANCO_PREGUNTAS = [
         opciones: [
             "t1 = a > b\nt2 = t1 == 0\nIfZ t2 Goto L1\nx = 1\nL1:",
             "t1 = a > b\nIf t1 Goto L1\nx = 1\nL1:",
-            "t1 = a <= b\nIfZ t1 Goto L1\nx = 1\nL1:\nEnd",
+            "t1 = a < b\nIf t1 Goto L_BODY\nt2 = a == b\nIfZ t2 Goto L1\nL_BODY: x = 1\nL1: End",
             "t1 = a > b\nt2 = NOT t1\nIfZ t2 Goto L1\nx = 1\nL1:\nEnd"
         ],
         correcta: 0
@@ -665,10 +665,10 @@ const BANCO_PREGUNTAS = [
     {
         pregunta: "Traducir: function f(x) { if (x <= 0) return 1; return x * f(x-1); } (Recursividad)",
         opciones: [
-            "_f:\nBeginFunc\nt1 = x > 0\nIf t1 Goto L1\nReturn 1\nL1:\nt2 = x - 1\nPushParam t2\nt3 = LCall _f\nPopParams 4\nt4 = x * t3\nReturn t4\nEndFunc",
+            "_f:\nBeginFunc 12\nt1 = x < 0\nIf t1 Goto L1\nt2 = x == 0\nIfZ t2 Goto L2\nL1:\nReturn 1\nL2:\nt3 = x - 1\nPushParam t3\nt4 = LCall _f\nPopParams 4\nt5 = x * t4\nReturn t5\nEndFunc",
             "Recursividad no se puede representar en TAC",
             "Se debe usar un bucle while",
-            "_f: If x <= 0 Return 1 else Return x * f(x-1)"
+            "_f: If x < 0 Return 1 else if x == 0 Return 1"
         ],
         correcta: 0
     },
