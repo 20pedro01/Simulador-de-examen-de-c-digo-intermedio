@@ -288,14 +288,14 @@ const BANCO_PREGUNTAS = [
         correcta: 0
     },
     {
-        pregunta: "Convertir a TAC (corto-circuito): x = (a > b) && (c < d)",
+        pregunta: "Convertir a TAC: x = (a > b) && (c < d)",
         opciones: [
-            "t1 = a > b\nt2 = c < d\nt3 = t1 && t2\nx = t3",
-            "t1 = a > b\nIfZ t1 Goto L1\nt2 = c < d\nx = t2\nGoto L2\nL1: x = 0\nL2: End",
-            "t1 = a > b\nt2 = c < d\nx = t1 & t2",
+            "t1 = a > b\\nt2 = c < d\\nt3 = t1 && t2\\nx = t3",
+            "t1 = a > b\\nIfZ t1 Goto L1\\nt2 = c < d\\nx = t2\\nGoto L2\\nL1: x = 0\\nL2: End",
+            "t1 = a > b\\nt2 = c < d\\nx = t1 & t2",
             "x = (a > b) & (c < d)"
         ],
-        correcta: 1
+        correcta: 0
     },
     {
         pregunta: "Convertir a TAC: val = a == b || a == c",
@@ -305,7 +305,7 @@ const BANCO_PREGUNTAS = [
             "val = (a == b) | (a == c)",
             "t1 = a == b\\nIfZ t1 Goto L_CHK2\\nGoto L1\\nL_CHK2: t2 = a == c\\nIfZ t2 Goto L_CHK3\\nGoto L1\\nL_CHK3: val = 0\\nGoto L2\\nL1: val = 1\\nL2:\\nEnd"
         ],
-        correcta: 1
+        correcta: 0
     },
     {
         pregunta: "Convertir a TAC la asignación: x = a[i]",
@@ -320,12 +320,12 @@ const BANCO_PREGUNTAS = [
     {
         pregunta: "Convertir a TAC: a[i] = b + c",
         opciones: [
-            "t1 = b + c\nt2 = i * 4\nt3 = a + t2\n*(t3) = t1",
+            "t1 = b + c\\nt2 = i * 4\\nt3 = a + t2\\n*(t3) = t1",
             "a[i] = b + c",
-            "t1 = i * 4\nt2 = a + t1\nt3 = b + c\n*(t2) = t3",
-            "t1 = b + c\nt2 = i * 4\n*(a + t2) = t1"
+            "t1 = i * 4\\nt2 = a + t1\\nt3 = b + c\\n*(t2) = t3",
+            "t1 = b + c\\nt2 = i * 4\\n*(a + t2) = t1"
         ],
-        correcta: 2
+        correcta: 0
     },
     {
         pregunta: "PHP: '$msg = \"Hola \" . $nombre;', ¿cómo se traduce la concatenación formal en TAC?",
@@ -413,8 +413,8 @@ const BANCO_PREGUNTAS = [
         pregunta: "Convertir a TAC: if (a < b) x = a; else x = b;",
         opciones: [
             "t1 = a < b\nIfZ t1 Goto L1\nx = a\nGoto L2\nL1:\nx = b\nL2:\nEnd",
-            "t1 = a < b\nIf t1 Goto L1\nx = b\nGoto L2\nL1:\nx = a\nL2:\nEnd",
-            "If a < b Goto L1\nx = b\nGoto L2\nL1: x = a\nL2:\nEnd",
+            "t1 = a < b\\nIfZ t1 Goto L_CHK\\nGoto L1\\nL_CHK:\\nx = b\\nGoto L2\\nL1:\\nx = a\\nL2:\\nEnd",
+            "IfZ a >= b Goto L1\\nx = b\\nGoto L2\\nL1: x = a\\nL2:\\nEnd",
             "t1 = a < b\nIfZ t1 Goto L1\nx = b\nGoto L2\nL1: x = a\nL2:\nEnd"
         ],
         correcta: 0
@@ -423,7 +423,7 @@ const BANCO_PREGUNTAS = [
         pregunta: "Traducir a TAC: while (a < 10) a = a + 1;",
         opciones: [
             "L1:\nt1 = a < 10\nIfZ t1 Goto L2\nt2 = a + 1\na = t2\nGoto L1\nL2:\nEnd",
-            "L1:\nt1 = a < 10\nIf t1 Goto L2\nGoto L3\nL2:\na = a + 1\nGoto L1\nL3:\nEnd",
+            "L1:\\nt1 = a < 10\\nIfZ t1 Goto L3\\nGoto L2\\nL2:\\na = a + 1\\nGoto L1\\nL3:\\nEnd",
             "t1 = a < 10\nL1: IfZ t1 Goto L2\na = a + 1\nGoto L1\nL2:\nEnd",
             "L1: IfZ a < 10 Goto L2\na = a + 1\nGoto L1\nL2:\nEnd"
         ],
@@ -433,7 +433,7 @@ const BANCO_PREGUNTAS = [
         pregunta: "Python: 'if x: print(x)', ¿TAC correcto (considerando truthy)?",
         opciones: [
             "IfZ x Goto L1\\nPushParam x\\nLCall _PrintInt\\nPopParams 4\\nL1:\\nEnd",
-            "t1 = x == 0\\nIf t1 Goto L1\\nPushParam x\\nLCall _PrintInt\\nPopParams 4\\nL1:\\nEnd",
+            "t1 = x == 0\\nIfZ t1 Goto L_BODY\\nGoto L1\\nL_BODY:\\nPushParam x\\nLCall _PrintInt\\nPopParams 4\\nL1:\\nEnd",
             "t1 = bool(x)\\nIfZ t1 Goto L1\\nPushParam x\\nLCall _PrintInt\\nPopParams 4\\nL1:\\nEnd",
             "t1 = x == 0\\nIfZ t1 Goto L_BODY\\nGoto L1\\nL_BODY: PushParam x; LCall _PrintInt; PopParams 4\\nL1: End"
         ],
@@ -443,31 +443,31 @@ const BANCO_PREGUNTAS = [
         pregunta: "Convertir a TAC: for (i=0; i<5; i++) suma += i;",
         opciones: [
             "i = 0\nL1:\nt1 = i < 5\nIfZ t1 Goto L2\nt2 = suma + i\nsuma = t2\nt3 = i + 1\ni = t3\nGoto L1\nL2:\nEnd",
-            "i = 0\nL1:\nt1 = i < 5\nIf t1 Goto L2\nGoto L3\nL2:\nsuma = suma + i\ni = i + 1\nGoto L1\nL3:\nEnd",
+            "i = 0\\nL1:\\nt1 = i < 5\\nIfZ t1 Goto L3\\nGoto L2\\nL2:\\nsuma = suma + i\\ni = i + 1\\nGoto L1\\nL3:\\nEnd",
             "i = 0\nt1 = i < 5\nL1: IfZ t1 Goto L2\nsuma = suma + i\ni = i + 1\nGoto L1\nL2:\nEnd",
-            "i = 0\nL1:\nt1 = i < 5\nIf t1 Goto L_BODY\nt2 = i == 5\nIf t2 Goto L_BODY\nGoto L2\nL_BODY: suma = suma + i; i = i + 1; Goto L1\nL2: End"
+            "i = 0\\nL1:\\nt1 = i < 5\\nIfZ t1 Goto L_CHK2\\nGoto L_BODY\\nL_CHK2:\\nt2 = i == 5\\nIfZ t2 Goto L2\\nL_BODY: suma = suma + i; i = i + 1; Goto L1\\nL2: End"
         ],
         correcta: 0
     },
     {
         pregunta: "Traducir: if (a > b && c > d) x = 1;",
         opciones: [
-            "t1 = a > b\nt2 = c > d\nt3 = t1 && t2\nIfZ t3 Goto L1\nx = 1\nL1:\nEnd",
-            "t1 = a > b\nIfZ t1 Goto L1\nt2 = c > d\nIfZ t2 Goto L1\nx = 1\nL1:\nEnd",
-            "t1 = a > b\nt2 = c > d\nx = t1 & t2\nIfZ x Goto L1\nx = 1\nL1:\nEnd",
-            "t1 = a > b\nIfZ t1 Goto L1\nt2 = c > d\nx = t2\nL1:\nEnd"
+            "t1 = a > b\\nIfZ t1 Goto L1\\nt2 = c > d\\nIfZ t2 Goto L1\\nx = 1\\nL1:\\nEnd",
+            "t1 = a > b\\nt2 = c > d\\nt3 = t1 && t2\\nIfZ t3 Goto L1\\nx = 1\\nL1:\\nEnd",
+            "t1 = a > b\\nt2 = c > d\\nx = t1 & t2\\nIfZ x Goto L1\\nx = 1\\nL1:\\nEnd",
+            "t1 = a > b\\nIfZ t1 Goto L1\\nt2 = c > d\\nx = t2\\nL1:\\nEnd"
         ],
-        correcta: 1
+        correcta: 0
     },
     {
         pregunta: "Traducir: if (a == 1 || b == 2) x = 0;",
         opciones: [
+            "t1 = a == 1\\nIfZ t1 Goto L_C2\\nGoto L2\\nL_C2: t2 = b == 2\\nIfZ t2 Goto L1\\nL2: x = 0\\nL1: End",
             "t1 = a == 1\\nt2 = b == 2\\nt3 = t1 || t2\\nIfZ t3 Goto L1\\nx = 0\\nL1:\\nEnd",
-            "t1 = a == 1\\nIfZ t1 Goto L_CHK\\nGoto L2\\nL_CHK: t2 = b == 2\\nIfZ t2 Goto L1\\nL2:\\nx = 0\\nL1:\\nEnd",
             "t1 = a == 1\\nt2 = b == 2\\nx = t1 | t2\\nIfZ x Goto L1\\nx = 0\\nL1:\\nEnd",
             "t1 = a == 1\\nIf t1 Goto L2\\nt2 = b == 2\\nIf t2 Goto L2\\nGoto L1\\nL2: x = 0\\nL1: End"
         ],
-        correcta: 1
+        correcta: 0
     },
     {
         pregunta: "Convertir a TAC: do { x = x - 1; } while (x > 0);",
@@ -483,7 +483,7 @@ const BANCO_PREGUNTAS = [
         pregunta: "Traducir: if (a) { b = 1; } else if (c) { b = 2; }",
         opciones: [
             "IfZ a Goto L1\nb = 1\nGoto L2\nL1:\nIfZ c Goto L2\nb = 2\nL2:\nEnd",
-            "If a Goto L1\nIf c Goto L2\nGoto L3\nL1: b = 1; Goto L3\nL2: b = 2\nL3:\nEnd",
+            "t1 = a\\nIfZ t1 Goto L_C2\\nGoto L1\\nL_C2: t2 = c\\nIfZ t2 Goto L3\\nGoto L2\\nL1: b = 1; Goto L3\\nL2: b = 2\\nL3:\\nEnd",
             "IfZ a Goto L1\nb = 1\nL1: IfZ c Goto L2\nb = 2\nL2:\nEnd",
             "t1 = a\nIfZ t1 Goto L1\nb = 1\nGoto L2\nL1: t2 = c\nIfZ t2 Goto L2\nb = 2\nL2:\nEnd"
         ],
@@ -513,9 +513,9 @@ const BANCO_PREGUNTAS = [
         pregunta: "Traducir: switch(x) { case 1: y=1; break; }",
         opciones: [
             "t1 = x == 1\nIfZ t1 Goto L_next\ny = 1\nGoto L_end_switch\nL_next: ...\nL_end_switch:\nEnd",
-            "If x == 1 Goto L1\nGoto L2\nL1: y = 1\nL2:\nEnd",
-            "Switch(x)\nCase 1: y = 1\nGoto EndSwitch\nEnd",
-            "t1 = x == 1\nIf t1 Goto L2\nGoto L1\nL2: y = 1\nGoto L_END\nL1: ... L_END: End"
+            "t1 = x == 1\\nIfZ t1 Goto L2\\nGoto L1\\nL1: y = 1\\nL2:\\nEnd",
+            "Switch(x)\\nCase 1: y = 1\\nGoto EndSwitch\\nEnd",
+            "t1 = x == 1\\nIfZ t1 Goto L1\\nGoto L2\\nL2: y = 1\\nGoto L_END\\nL1: ... L_END: End"
         ],
         correcta: 0
     },
@@ -523,7 +523,7 @@ const BANCO_PREGUNTAS = [
         pregunta: "Traducir: a = (b > c) ? b : c;",
         opciones: [
             "t1 = b > c\nIfZ t1 Goto L1\na = b\nGoto L2\nL1:\na = c\nL2:\nEnd",
-            "If b > c a = b else a = c",
+            "t1 = b > c\\na = t1 ? b : c",
             "t1 = b\nt2 = c\nt3 = t1 > t2\nIfZ t3 Goto L1\na = t1\nGoto L2\nL1: a = t2\nL2: End",
             "t1 = b\nt2 = c\na = t1 > t2 ? t1 : t2"
         ],
@@ -534,7 +534,7 @@ const BANCO_PREGUNTAS = [
         opciones: [
             "PushParam \"String\"\nPushParam obj\nt1 = LCall _InstanceOf\nPopParams 8\nIfZ t1 Goto L1\n...\nL1:\nEnd",
             "t1 = obj instanceof String",
-            "If obj is String Goto L1",
+            "t1 = obj is String\\nIfZ t1 Goto L2",
             "t1 = LCall _TypeCheck(obj, \"String\")\nIfZ t1 Goto L1\n...\nL1:\nEnd"
         ],
         correcta: 0
@@ -543,8 +543,8 @@ const BANCO_PREGUNTAS = [
         pregunta: "Traducir a TAC: if (!(a > b)) x = 1;",
         opciones: [
             "t1 = a > b\nt2 = t1 == 0\nIfZ t2 Goto L1\nx = 1\nL1:\nEnd",
-            "t1 = a > b\nIf t1 Goto L1\nx = 1\nL1:\nEnd",
-            "t1 = a < b\nIf t1 Goto L_BODY\nt2 = a == b\nIfZ t2 Goto L1\nL_BODY: x = 1\nL1: End",
+            "t1 = a > b\\nIfZ t1 Goto L_END\\nGoto L1\\nL1: x = 1\\nL_END:\\nEnd",
+            "t1 = a < b\\nIfZ t1 Goto L_C2\\nGoto L_BODY\\nL_C2:\\nt2 = a == b\\nIfZ t2 Goto L1\\nL_BODY: x = 1\\nL1: End",
             "t1 = a > b\nt2 = NOT t1\nIfZ t2 Goto L1\nx = 1\nL1:\nEnd"
         ],
         correcta: 0
@@ -564,8 +564,8 @@ const BANCO_PREGUNTAS = [
         opciones: [
             "t1 = b > 0\nIfZ t1 Goto L1\nt2 = 10\nGoto L2\nL1: t2 = 20\nL2:\nt3 = a + t2\nx = t3\nEnd",
             "t1 = b > 0\nIfZ t1 Goto L1\nx = a + 10\nGoto L2\nL1: x = a + 20\nL2:\nEnd",
-            "t1 = 10\nIf b > 0 Goto L1\nt1 = 20\nL1: x = a + t1\nEnd",
-            "t1 = b > 0\nIf t1 Goto L1\nt1 = 10\nGoto L2\nL1: t1 = 20\nL2:\nx = a + t1\nEnd"
+            "t1 = 10\\nt2 = b > 0\\nIfZ t2 Goto L_BODY\\nGoto L1\\nL_BODY: t1 = 20\\nL1: x = a + t1\\nEnd",
+            "t1 = b > 0\\nIfZ t1 Goto L_CHK\\nGoto L1\\nL_CHK:\\nt1 = 10\\nGoto L2\\nL1: t1 = 20\\nL2:\\nx = a + t1\\nEnd"
         ],
         correcta: 0
     },
@@ -574,8 +574,8 @@ const BANCO_PREGUNTAS = [
         opciones: [
             "i = 0\nL1: t1 = i < 3; IfZ t1 Goto L2; ... i = i + 1; Goto L1; L2:\nEnd",
             "i = 3\nL1: IfZ i Goto L2; ... i = i - 1; Goto L1; L2:\nEnd",
-            "i = 0\nL1: ... i = i + 1; If i < 3 Goto L1\nEnd",
-            "i = 0\nL1: If i == 3 Goto L2\n...\ni = i + 1\nGoto L1\nL2: End"
+            "i = 0\\nL1: ... i = i + 1; t1 = i < 3\\nIfZ t1 Goto L_END\\nGoto L1\\nL_END:\\nEnd",
+            "i = 0\\nL1: t1 = i == 3\\nIfZ t1 Goto L_BODY\\nGoto L2\\nL_BODY:\\n...\\ni = i + 1\\nGoto L1\\nL2: End"
         ],
         correcta: 0
     },
@@ -583,9 +583,9 @@ const BANCO_PREGUNTAS = [
         pregunta: "Traducir: if (a == b) { if (c == d) x = 1; }",
         opciones: [
             "t1 = a == b\nIfZ t1 Goto L1\nt2 = c == d\nIfZ t2 Goto L1\nx = 1\nL1:\nEnd",
-            "t1 = a == b\nIf t1 Goto L2\nGoto L1\nL2: t2 = c == d; If t2 Goto L3; Goto L1; L3: x = 1\nL1:\nEnd",
-            "t1 = a == b\nt2 = c == d\nt3 = t1 & t2\nIfZ t3 Goto L1\nx = 1\nL1:\nEnd",
-            "t1 = a == b\nIfZ t1 Goto L1\nt2 = c == d\nIf t2 Goto L2\nGoto L1\nL2: x = 1\nL1: End"
+            "t1 = a == b\\nIfZ t1 Goto L1\\nGoto L2\\nL2: t2 = c == d; IfZ t2 Goto L1; Goto L3; L3: x = 1\\nL1:\\nEnd",
+            "t1 = a == b\\nt2 = c == d\\nt3 = t1 & t2\\nIfZ t3 Goto L1\\nx = 1\\nL1:\\nEnd",
+            "t1 = a == b\\nIfZ t1 Goto L1\\nt2 = c == d\\nIfZ t2 Goto L1\\nGoto L2\\nL2: x = 1\\nL1: End"
         ],
         correcta: 0
     },
@@ -766,7 +766,7 @@ const BANCO_PREGUNTAS = [
         opciones: [
             "IfZ a Goto L1\nReturn 1\nL1:\nReturn 2",
             "Return (a ? 1 : 2)",
-            "If a Return 1 else Return 2",
+            "t1 = a\\nIfZ t1 Goto L2\\nReturn 1\\nL2: Return 2",
             "t1 = a; IfZ t1 Goto L1; Return 1; L1: Return 2"
         ],
         correcta: 0
@@ -971,9 +971,9 @@ const BANCO_PREGUNTAS = [
         tipo: 'ordenar',
         bloques: [
             "t6 = a > 0",
-            "IfZ t6 Goto L8",
             "t2 = b > 0",
-            "IfZ t2 Goto L8",
+            "t3 = t6 && t2",
+            "IfZ t3 Goto L8",
             "x = 1",
             "L8:",
             "End"
@@ -985,12 +985,9 @@ const BANCO_PREGUNTAS = [
         tipo: 'ordenar',
         bloques: [
             "t5 = a == 1",
-            "IfZ t5 Goto L_M",
-            "Goto L3",
-            "L_M:",
             "t9 = b == 2",
-            "IfZ t9 Goto L8",
-            "L3:",
+            "t4 = t5 || t9",
+            "IfZ t4 Goto L8",
             "x = 0",
             "L8:",
             "End"
@@ -1168,7 +1165,7 @@ function init() {
 
 function mostrarResultadosInmediato() {
     DOM.pantallaInicio.classList.remove('active');
-    completarExamen(false); 
+    completarExamen(false);
 }
 
 function comenzarSimulacion() {
@@ -1177,7 +1174,7 @@ function comenzarSimulacion() {
     estado.seleccionadas = [...BANCO_PREGUNTAS]
         .sort(() => Math.random() - 0.5)
         .slice(0, CONFIG.preguntasExamen);
-    
+
     estado.respuestas = new Array(CONFIG.preguntasExamen).fill(null);
     estado.indiceActual = 0;
     estado.finalizado = false;
@@ -1200,18 +1197,18 @@ function formatQuestion(text) {
         const parts = text.split(':');
         const intro = parts[0].trim();
         let code = parts.slice(1).join(':').trim();
-        
+
         if (code.length > 0) {
             // Si tiene llaves, punto y coma o múltiples líneas, lo tratamos como "código real"
             const esCodigoLargo = code.includes('{') || code.includes(';') || code.includes('\n');
-            
+
             if (esCodigoLargo) {
                 // Formatear líneas para que se vea como código real
                 const formattedCode = code.replace(/\{/g, ' {<br>&nbsp;&nbsp;')
-                                          .replace(/\}/g, '<br>}')
-                                          .replace(/;/g, ';<br>&nbsp;&nbsp;')
-                                          .replace(/<br>&nbsp;&nbsp;<br>/g, '<br>'); // limpiar dobles saltos
-                
+                    .replace(/\}/g, '<br>}')
+                    .replace(/;/g, ';<br>&nbsp;&nbsp;')
+                    .replace(/<br>&nbsp;&nbsp;<br>/g, '<br>'); // limpiar dobles saltos
+
                 return `${intro}: <div class="code-block">${formattedCode}</div>`;
             } else {
                 // Si es corto, solo resaltamos en una línea
@@ -1219,31 +1216,31 @@ function formatQuestion(text) {
             }
         }
     }
-    return text.replace(/\n/g, '<br>');
+    return text.replace(/\\\\n/g, '<br>').replace(/\\n/g, '<br>');
 }
 
 function formatOption(text) {
     // Si contiene múltiples líneas o patrones típicos de TAC (t1 =, Label:, Goto)
-    if (text.includes('\n') || /t\d\s*=/.test(text) || /L\d:/.test(text) || /Goto/.test(text)) {
-        return `<span class="tac-block">${text.replace(/\n/g, '<br>')}</span>`;
+    if (text.includes('\\n') || text.includes('\\\\n') || /t\\d\\s*=/.test(text) || /L(?:\\d+|_[A-Za-z0-9_]*):/.test(text) || /Goto/.test(text)) {
+        return `<span class="tac-block">${text.replace(/\\\\n/g, '<br>').replace(/\\n/g, '<br>')}</span>`;
     }
-    return text.replace(/\n/g, '<br>');
+    return text.replace(/\\\\n/g, '<br>').replace(/\\n/g, '<br>');
 }
 
 function renderizarPregunta() {
     const pregunta = estado.seleccionadas[estado.indiceActual];
     DOM.contenedorPregunta.style.opacity = '0';
-    
+
     setTimeout(() => {
         let contenido = `<div class="question-header"><p class="question-text">${formatQuestion(pregunta.pregunta)}</p></div>`;
-        
+
         if (pregunta.tipo === 'ordenar') {
             if (!estado.respuestas[estado.indiceActual]) {
                 estado.respuestas[estado.indiceActual] = [...pregunta.bloques].sort(() => Math.random() - 0.5);
             }
             const bloquesRandom = estado.respuestas[estado.indiceActual];
             const bloquesMostrados = normalizarTAC(bloquesRandom);
-            
+
             contenido += `<div class="options-list sortable-list" id="sortable-list">
                 ${bloquesRandom.map((bloque, i) => `
                     <div class="option sortable-item" draggable="true" data-index="${i}" data-original-tac="${bloque.replace(/"/g, '&quot;')}">
@@ -1264,13 +1261,13 @@ function renderizarPregunta() {
                 `).join('')}
             </div>`;
         }
-        
+
         DOM.contenedorPregunta.innerHTML = contenido;
-        
+
         if (pregunta.tipo === 'ordenar') {
             initSortable();
         }
-        
+
         DOM.contenedorPregunta.style.opacity = '1';
         actualizarUI();
     }, 200);
@@ -1282,13 +1279,13 @@ function initSortable() {
     let dragItem = null;
 
     items.forEach(item => {
-        item.addEventListener('dragstart', function(e) {
+        item.addEventListener('dragstart', function (e) {
             dragItem = item;
             setTimeout(() => item.style.opacity = '0.5', 0);
         });
-        item.addEventListener('dragend', function() {
+        item.addEventListener('dragend', function () {
             setTimeout(() => {
-                if(dragItem) dragItem.style.opacity = '1';
+                if (dragItem) dragItem.style.opacity = '1';
                 dragItem = null;
                 guardarOrdenActual();
                 updateVisibleTAC();
@@ -1296,7 +1293,7 @@ function initSortable() {
         });
     });
 
-    list.addEventListener('dragover', function(e) {
+    list.addEventListener('dragover', function (e) {
         e.preventDefault();
         const afterElement = getDragAfterElement(list, e.clientY);
         const dragging = dragItem;
@@ -1346,7 +1343,7 @@ function normalizarTAC(bloques) {
     let tCounter = 1;
     let mapL = {};
     let lCounter = 1;
-    
+
     return bloques.map(line => {
         let nl = line.replace(/\bL(?:\d+|_[A-Za-z0-9_]*)\b/g, m => {
             if (!mapL[m]) mapL[m] = 'L' + (lCounter++);
@@ -1376,7 +1373,7 @@ function actualizarUI() {
     DOM.barraProgreso.style.width = `${porcentaje}%`;
 
     DOM.btnAnterior.style.visibility = estado.indiceActual === 0 ? 'hidden' : 'visible';
-    
+
     if (estado.indiceActual === CONFIG.preguntasExamen - 1) {
         DOM.btnSiguiente.classList.add('hidden');
         DOM.btnFinalizar.classList.remove('hidden');
@@ -1412,9 +1409,9 @@ function completarExamen(conAnimacion = true) {
             const arr = estado.respuestas[i];
             if (arr && Array.isArray(arr) && arr.length === p.bloques.length) {
                 let correct = true;
-                for(let k=0; k<p.bloques.length; k++) {
+                for (let k = 0; k < p.bloques.length; k++) {
                     // Match line by line ignoring whitespace differences
-                    if (arr[k].replace(/\n/g, '').replace(/\s+/g, '') !== p.bloques[k].replace(/\n/g, '').replace(/\s+/g, '')) {
+                    if (arr[k].replace(/\\\\n/g, '').replace(/\\n/g, '').replace(/\\s+/g, '') !== p.bloques[k].replace(/\\\\n/g, '').replace(/\\n/g, '').replace(/\\s+/g, '')) {
                         correct = false;
                         break;
                     }
@@ -1427,7 +1424,7 @@ function completarExamen(conAnimacion = true) {
     });
 
     const porcentaje = Math.round((aciertos / CONFIG.preguntasExamen) * 100);
-    
+
     DOM.calificacion.innerText = porcentaje;
     DOM.aciertos.innerText = aciertos;
     DOM.totalPreguntas.innerText = CONFIG.preguntasExamen;
@@ -1444,7 +1441,7 @@ function completarExamen(conAnimacion = true) {
 
     DOM.pantallaExamen.classList.remove('active');
     DOM.pantallaExamen.classList.add('hidden'); // Asegurar que no estorbe
-    
+
     if (conAnimacion) {
         setTimeout(() => {
             DOM.pantallaResultados.classList.add('active');
@@ -1469,15 +1466,15 @@ function generarRevision() {
     DOM.listaRevision.innerHTML = estado.seleccionadas.map((p, i) => {
         let esCorrecta = false;
         let revisionAns = '';
-        
+
         if (p.tipo === 'ordenar') {
             const arr = estado.respuestas[i];
-            esCorrecta = arr && Array.isArray(arr) && arr.length === p.bloques.length && arr.every((val, idx) => val.replace(/\n/g, '').replace(/\s+/g, '') === p.bloques[idx].replace(/\n/g, '').replace(/\s+/g, ''));
+            esCorrecta = arr && Array.isArray(arr) && arr.length === p.bloques.length && arr.every((val, idx) => val.replace(/\\\\n/g, '').replace(/\\n/g, '').replace(/\\s+/g, '') === p.bloques[idx].replace(/\\\\n/g, '').replace(/\\n/g, '').replace(/\\s+/g, ''));
             const respActual = arr && Array.isArray(arr) ? normalizarTAC(arr) : [];
             const correctosNormalizados = normalizarTAC(p.bloques);
-            revisionAns = `<span class="user-ans">Tu respuesta:<br><div style="margin-left:10px;">${respActual.map(r=>formatOption(r)).join('<br>')}</div></span>`;
+            revisionAns = `<span class="user-ans">Tu respuesta:<br><div style="margin-left:10px;">${respActual.map(r => formatOption(r)).join('<br>')}</div></span>`;
             if (!esCorrecta) {
-                revisionAns += `<br><br><span class="correct-ans">Respuesta correcta:<br><div style="margin-left:10px;">${correctosNormalizados.map(r=>formatOption(r)).join('<br>')}</div></span>`;
+                revisionAns += `<br><br><span class="correct-ans">Respuesta correcta:<br><div style="margin-left:10px;">${correctosNormalizados.map(r => formatOption(r)).join('<br>')}</div></span>`;
             }
         } else {
             esCorrecta = estado.respuestas[i] === p.correcta;
@@ -1486,7 +1483,7 @@ function generarRevision() {
                 revisionAns += `<br><span class="correct-ans">Respuesta correcta: ${formatOption(p.opciones[p.correcta])}</span>`;
             }
         }
-        
+
         return `
             <div class="revision-item ${esCorrecta ? 'correct' : 'incorrect'}">
                 <div class="status-tag ${esCorrecta ? 'correct' : 'incorrect'}">
