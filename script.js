@@ -1,6 +1,5 @@
 /**
  * SIMULADOR DE EXAMEN - GENERACIÓN DE CÓDIGO INTERMEDIO (TAC)
- * Desarrollador: Antigravity AI
  * Tema: Unidad 2 - Generación de Código Intermedio
  */
 
@@ -301,10 +300,10 @@ const BANCO_PREGUNTAS = [
     {
         pregunta: "Convertir a TAC: val = a == b || a == c",
         opciones: [
-            "t1 = a == b\nt2 = a == c\nt3 = t1 || t2\nval = t3",
-            "t1 = a == b\nIf t1 Goto L1\nt2 = a == c\nIfZ t2 Goto L2\nL1: val = 1\nGoto L3\nL2: val = 0\nL3:",
+            "t1 = a == b\\nt2 = a == c\\nt3 = t1 || t2\\nval = t3",
+            "t1 = a == b\\nIfZ t1 Goto L_CHK\\nGoto L1\\nL_CHK: t2 = a == c\\nIfZ t2 Goto L2\\nL1: val = 1\\nGoto L3\\nL2: val = 0\\nL3:\\nEnd",
             "val = (a == b) | (a == c)",
-            "t1 = a == b\nIf t1 Goto L1\nt2 = a == c\nIf t2 Goto L1\nval = 0\nGoto L2\nL1: val = 1\nL2: End"
+            "t1 = a == b\\nIfZ t1 Goto L_CHK2\\nGoto L1\\nL_CHK2: t2 = a == c\\nIfZ t2 Goto L_CHK3\\nGoto L1\\nL_CHK3: val = 0\\nGoto L2\\nL1: val = 1\\nL2:\\nEnd"
         ],
         correcta: 1
     },
@@ -433,12 +432,12 @@ const BANCO_PREGUNTAS = [
     {
         pregunta: "Python: 'if x: print(x)', ¿TAC correcto (considerando truthy)?",
         opciones: [
-            "IfZ x Goto L1\nPushParam x\nLCall _PrintInt\nPopParams 4\nL1:\nEnd",
-            "t1 = x == 0\nIf t1 Goto L1\nPushParam x\nLCall _PrintInt\nPopParams 4\nL1:\nEnd",
-            "t1 = bool(x)\nIfZ t1 Goto L1\nPushParam x\nLCall _PrintInt\nPopParams 4\nL1:\nEnd",
-            "t1 = x == 0\nIfZ t1 Goto L_BODY\nGoto L1\nL_BODY: PushParam x; LCall _PrintInt; PopParams 4\nL1: End"
+            "IfZ x Goto L1\\nPushParam x\\nLCall _PrintInt\\nPopParams 4\\nL1:\\nEnd",
+            "t1 = x == 0\\nIf t1 Goto L1\\nPushParam x\\nLCall _PrintInt\\nPopParams 4\\nL1:\\nEnd",
+            "t1 = bool(x)\\nIfZ t1 Goto L1\\nPushParam x\\nLCall _PrintInt\\nPopParams 4\\nL1:\\nEnd",
+            "t1 = x == 0\\nIfZ t1 Goto L_BODY\\nGoto L1\\nL_BODY: PushParam x; LCall _PrintInt; PopParams 4\\nL1: End"
         ],
-        correcta: 1
+        correcta: 0
     },
     {
         pregunta: "Convertir a TAC: for (i=0; i<5; i++) suma += i;",
@@ -463,20 +462,20 @@ const BANCO_PREGUNTAS = [
     {
         pregunta: "Traducir: if (a == 1 || b == 2) x = 0;",
         opciones: [
-            "t1 = a == 1\nt2 = b == 2\nt3 = t1 || t2\nIfZ t3 Goto L1\nx = 0\nL1:\nEnd",
-            "t1 = a == 1\nIf t1 Goto L2\nt2 = b == 2\nIfZ t2 Goto L1\nL2:\nx = 0\nL1:\nEnd",
-            "t1 = a == 1\nt2 = b == 2\nx = t1 | t2\nIfZ x Goto L1\nx = 0\nL1:\nEnd",
-            "t1 = a == 1\nIf t1 Goto L2\nt2 = b == 2\nIf t2 Goto L2\nGoto L1\nL2: x = 0\nL1: End"
+            "t1 = a == 1\\nt2 = b == 2\\nt3 = t1 || t2\\nIfZ t3 Goto L1\\nx = 0\\nL1:\\nEnd",
+            "t1 = a == 1\\nIfZ t1 Goto L_CHK\\nGoto L2\\nL_CHK: t2 = b == 2\\nIfZ t2 Goto L1\\nL2:\\nx = 0\\nL1:\\nEnd",
+            "t1 = a == 1\\nt2 = b == 2\\nx = t1 | t2\\nIfZ x Goto L1\\nx = 0\\nL1:\\nEnd",
+            "t1 = a == 1\\nIf t1 Goto L2\\nt2 = b == 2\\nIf t2 Goto L2\\nGoto L1\\nL2: x = 0\\nL1: End"
         ],
         correcta: 1
     },
     {
         pregunta: "Convertir a TAC: do { x = x - 1; } while (x > 0);",
         opciones: [
-            "L1:\nt1 = x - 1\nx = t1\nt2 = x > 0\nIf t2 Goto L1\nEnd",
-            "L1:\nx = x - 1\nt1 = x > 0\nIfZ t1 Goto L2\nGoto L1\nL2:\nEnd",
-            "t1 = x - 1\nx = t1\nL1: If x > 0 Goto L1\nEnd",
-            "L1: x = x - 1\nIf x > 0 Goto L1\nEnd"
+            "L1:\\nt1 = x - 1\\nx = t1\\nt2 = x > 0\\nIfZ t2 Goto L2\\nGoto L1\\nL2:\\nEnd",
+            "L1:\\nx = x - 1\\nt1 = x > 0\\nIfZ t1 Goto L2\\nGoto L1\\nL2:\\nEnd",
+            "t1 = x - 1\\nx = t1\\nL1: IfZ x > 0 Goto L2\\nGoto L1\\nL2:\\nEnd",
+            "L1: x = x - 1\\nIfZ x > 0 Goto L2\\nGoto L1\\nL2:\\nEnd"
         ],
         correcta: 0
     },
@@ -523,7 +522,7 @@ const BANCO_PREGUNTAS = [
     {
         pregunta: "Traducir: a = (b > c) ? b : c;",
         opciones: [
-            "t1 = b > c\nIfZ t1 Goto L1\na = b\nGoto L2\nL1:\na = c\nL2:",
+            "t1 = b > c\nIfZ t1 Goto L1\na = b\nGoto L2\nL1:\na = c\nL2:\nEnd",
             "If b > c a = b else a = c",
             "t1 = b\nt2 = c\nt3 = t1 > t2\nIfZ t3 Goto L1\na = t1\nGoto L2\nL1: a = t2\nL2: End",
             "t1 = b\nt2 = c\na = t1 > t2 ? t1 : t2"
@@ -533,18 +532,18 @@ const BANCO_PREGUNTAS = [
     {
         pregunta: "Java: 'if (obj instanceof String) ...', ¿cómo se traduce?",
         opciones: [
-            "PushParam \"String\"\nPushParam obj\nt1 = LCall _InstanceOf\nPopParams 8\nIfZ t1 Goto L1",
+            "PushParam \"String\"\nPushParam obj\nt1 = LCall _InstanceOf\nPopParams 8\nIfZ t1 Goto L1\n...\nL1:\nEnd",
             "t1 = obj instanceof String",
             "If obj is String Goto L1",
-            "t1 = LCall _TypeCheck(obj, \"String\")\nIfZ t1 Goto L1"
+            "t1 = LCall _TypeCheck(obj, \"String\")\nIfZ t1 Goto L1\n...\nL1:\nEnd"
         ],
         correcta: 0
     },
     {
         pregunta: "Traducir a TAC: if (!(a > b)) x = 1;",
         opciones: [
-            "t1 = a > b\nt2 = t1 == 0\nIfZ t2 Goto L1\nx = 1\nL1:",
-            "t1 = a > b\nIf t1 Goto L1\nx = 1\nL1:",
+            "t1 = a > b\nt2 = t1 == 0\nIfZ t2 Goto L1\nx = 1\nL1:\nEnd",
+            "t1 = a > b\nIf t1 Goto L1\nx = 1\nL1:\nEnd",
             "t1 = a < b\nIf t1 Goto L_BODY\nt2 = a == b\nIfZ t2 Goto L1\nL_BODY: x = 1\nL1: End",
             "t1 = a > b\nt2 = NOT t1\nIfZ t2 Goto L1\nx = 1\nL1:\nEnd"
         ],
@@ -563,10 +562,10 @@ const BANCO_PREGUNTAS = [
     {
         pregunta: "Traducir a TAC: x = a + (b > 0 ? 10 : 20)",
         opciones: [
-            "t1 = b > 0\nIfZ t1 Goto L1\nt2 = 10\nGoto L2\nL1: t2 = 20\nL2:\nt3 = a + t2\nx = t3",
-            "t1 = b > 0\nIfZ t1 Goto L1\nx = a + 10\nGoto L2\nL1: x = a + 20\nL2:",
+            "t1 = b > 0\nIfZ t1 Goto L1\nt2 = 10\nGoto L2\nL1: t2 = 20\nL2:\nt3 = a + t2\nx = t3\nEnd",
+            "t1 = b > 0\nIfZ t1 Goto L1\nx = a + 10\nGoto L2\nL1: x = a + 20\nL2:\nEnd",
             "t1 = 10\nIf b > 0 Goto L1\nt1 = 20\nL1: x = a + t1\nEnd",
-            "t1 = b > 0\nIf t1 Goto L1\nt1 = 10\nGoto L2\nL1: t1 = 20\nL2: x = a + t1"
+            "t1 = b > 0\nIf t1 Goto L1\nt1 = 10\nGoto L2\nL1: t1 = 20\nL2:\nx = a + t1\nEnd"
         ],
         correcta: 0
     },
@@ -665,10 +664,10 @@ const BANCO_PREGUNTAS = [
     {
         pregunta: "Traducir: function f(x) { if (x <= 0) return 1; return x * f(x-1); } (Recursividad)",
         opciones: [
-            "_f:\nBeginFunc 12\nt1 = x < 0\nIf t1 Goto L1\nt2 = x == 0\nIfZ t2 Goto L2\nL1:\nReturn 1\nL2:\nt3 = x - 1\nPushParam t3\nt4 = LCall _f\nPopParams 4\nt5 = x * t4\nReturn t5\nEndFunc",
+            "_f:\\nBeginFunc 12\\nt1 = x < 0\\nIfZ t1 Goto L_CHK\\nGoto L1\\nL_CHK: t2 = x == 0\\nIfZ t2 Goto L2\\nL1:\\nReturn 1\\nL2:\\nt3 = x - 1\\nPushParam t3\\nt4 = LCall _f\\nPopParams 4\\nt5 = x * t4\\nReturn t5\\nEndFunc",
             "Recursividad no se puede representar en TAC",
             "Se debe usar un bucle while",
-            "_f: If x < 0 Return 1 else if x == 0 Return 1"
+            "_f: IfZ x > 0 Goto L1\\nGoto L2\\nL1: Return 1\\nL2: ..."
         ],
         correcta: 0
     },
@@ -811,6 +810,277 @@ const BANCO_PREGUNTAS = [
             "Para cambiar el color del código"
         ],
         correcta: 0
+    },
+    // --- PREGUNTAS (ORDENAR BLOQUES) JERARQUÍA DE OPERACIONES ---
+    {
+        pregunta: "Ordena el siguiente código TAC para la expresión: x = (a + b * c - d + e * f) / g",
+        tipo: 'ordenar',
+        bloques: [
+            "t5 = b * c",
+            "t2 = e * f",
+            "t8 = a + t5",
+            "t1 = t8 - d",
+            "t9 = t1 + t2",
+            "t4 = t9 / g",
+            "x = t4"
+        ],
+        correcta: -1
+    },
+    {
+        pregunta: "Ordena el siguiente código TAC para la expresión: valor = ((a * b) + (c - d)) / (e + f)",
+        tipo: 'ordenar',
+        bloques: [
+            "t3 = a * b",
+            "t9 = c - d",
+            "t5 = t3 + t9",
+            "t1 = e + f",
+            "t8 = t5 / t1",
+            "valor = t8"
+        ],
+        correcta: -1
+    },
+    {
+        pregunta: "Ordena los bloques TAC para: z = a * b * c + d * e",
+        tipo: 'ordenar',
+        bloques: [
+            "t6 = a * b",
+            "t2 = t6 * c",
+            "t9 = d * e",
+            "t4 = t2 + t9",
+            "z = t4"
+        ],
+        correcta: -1
+    },
+    {
+        pregunta: "Ordena los bloques TAC para: res = (a + b) * (c + d) - e",
+        tipo: 'ordenar',
+        bloques: [
+            "t8 = a + b",
+            "t1 = c + d",
+            "t6 = t8 * t1",
+            "t4 = t6 - e",
+            "res = t4"
+        ],
+        correcta: -1
+    },
+    {
+        pregunta: "Ordena los bloques TAC para: k = a - (b - c) * d",
+        tipo: 'ordenar',
+        bloques: [
+            "t7 = b - c",
+            "t2 = t7 * d",
+            "t9 = a - t2",
+            "k = t9"
+        ],
+        correcta: -1
+    },
+    {
+        pregunta: "Ordena los bloques TAC para: w = a / b + c * d - e",
+        tipo: 'ordenar',
+        bloques: [
+            "t4 = a / b",
+            "t8 = c * d",
+            "t1 = t4 + t8",
+            "t6 = t1 - e",
+            "w = t6"
+        ],
+        correcta: -1
+    },
+    {
+        pregunta: "Ordena los bloques TAC para: m = a * (b + c / d)",
+        tipo: 'ordenar',
+        bloques: [
+            "t9 = c / d",
+            "t4 = b + t9",
+            "t5 = a * t4",
+            "m = t5"
+        ],
+        correcta: -1
+    },
+    {
+        pregunta: "Ordena los bloques TAC para: y = (a - b) / (c * d) + e",
+        tipo: 'ordenar',
+        bloques: [
+            "t2 = a - b",
+            "t7 = c * d",
+            "t4 = t2 / t7",
+            "t8 = t4 + e",
+            "y = t8"
+        ],
+        correcta: -1
+    },
+    {
+        pregunta: "Ordena los bloques TAC para: v = a + b / c - d * e",
+        tipo: 'ordenar',
+        bloques: [
+            "t8 = b / c",
+            "t3 = d * e",
+            "t6 = a + t8",
+            "t2 = t6 - t3",
+            "v = t2"
+        ],
+        correcta: -1
+    },
+    {
+        pregunta: "Ordena los bloques TAC evaluando lógicamente (AND tiene mayor jerarquía que OR): val = (a < b) || (c > d) && (e == f)",
+        tipo: 'ordenar',
+        bloques: [
+            "t3 = c > d",
+            "t8 = e == f",
+            "t1 = t3 && t8",
+            "t5 = a < b",
+            "t9 = t5 || t1",
+            "val = t9"
+        ],
+        correcta: -1
+    },
+
+    // --- PREGUNTAS (ORDENAR BLOQUES) ESTRUCTURAS DE CONTROL Y TAC COMPLEJO ---
+    {
+        pregunta: "Ordena el código TAC de un if-else clásico: if (x == 10) y = 1; else y = 2;",
+        tipo: 'ordenar',
+        bloques: [
+            "t8 = x == 10",
+            "IfZ t8 Goto L4",
+            "y = 1",
+            "Goto L9",
+            "L4:",
+            "y = 2",
+            "L9:",
+            "End"
+        ],
+        correcta: -1
+    },
+    {
+        pregunta: "Ordena el código TAC del ciclo de evaluación: while (a < b) { a = a + 1; }",
+        tipo: 'ordenar',
+        bloques: [
+            "L5:",
+            "t3 = a < b",
+            "IfZ t3 Goto L2",
+            "t7 = a + 1",
+            "a = t7",
+            "Goto L5",
+            "L2:",
+            "End"
+        ],
+        correcta: -1
+    },
+    {
+        pregunta: "Ordena el código TAC condicional lógico AND: if (a > 0 && b > 0) x = 1;",
+        tipo: 'ordenar',
+        bloques: [
+            "t6 = a > 0",
+            "IfZ t6 Goto L8",
+            "t2 = b > 0",
+            "IfZ t2 Goto L8",
+            "x = 1",
+            "L8:",
+            "End"
+        ],
+        correcta: -1
+    },
+    {
+        pregunta: "Ordena el código TAC condicional lógico OR: if (a == 1 || b == 2) x = 0;",
+        tipo: 'ordenar',
+        bloques: [
+            "t5 = a == 1",
+            "IfZ t5 Goto L_M",
+            "Goto L3",
+            "L_M:",
+            "t9 = b == 2",
+            "IfZ t9 Goto L8",
+            "L3:",
+            "x = 0",
+            "L8:",
+            "End"
+        ],
+        correcta: -1
+    },
+    {
+        pregunta: "Ordena el código TAC de ciclo inferior: do { x = x - 1; } while (x > 0);",
+        tipo: 'ordenar',
+        bloques: [
+            "L7:",
+            "t2 = x - 1",
+            "x = t2",
+            "t6 = x > 0",
+            "IfZ t6 Goto L4",
+            "Goto L7",
+            "L4:",
+            "End"
+        ],
+        correcta: -1
+    },
+    {
+        pregunta: "Ordena el código TAC de ciclo repetidor: for (i=0; i<5; i++) { suma += i; }",
+        tipo: 'ordenar',
+        bloques: [
+            "i = 0",
+            "L9:",
+            "t4 = i < 5",
+            "IfZ t4 Goto L2",
+            "t8 = suma + i",
+            "suma = t8",
+            "t1 = i + 1",
+            "i = t1",
+            "Goto L9",
+            "L2:",
+            "End"
+        ],
+        correcta: -1
+    },
+    {
+        pregunta: "Ordena el código TAC condicional negado lógico: if (!(a == b)) x = 1;",
+        tipo: 'ordenar',
+        bloques: [
+            "t7 = a == b",
+            "t3 = NOT t7",
+            "IfZ t3 Goto L5",
+            "x = 1",
+            "L5:",
+            "End"
+        ],
+        correcta: -1
+    },
+    {
+        pregunta: "Ordena el código TAC del operador ternario: a = (b > c) ? b : c;",
+        tipo: 'ordenar',
+        bloques: [
+            "t2 = b > c",
+            "IfZ t2 Goto L8",
+            "a = b",
+            "Goto L4",
+            "L8:",
+            "a = c",
+            "L4:",
+            "End"
+        ],
+        correcta: -1
+    },
+    {
+        pregunta: "Ordena el código TAC de la llamada a función: x = func(param1, param2);",
+        tipo: 'ordenar',
+        bloques: [
+            "PushParam param2",
+            "PushParam param1",
+            "t6 = LCall _func",
+            "PopParams 8",
+            "x = t6"
+        ],
+        correcta: -1
+    },
+    {
+        pregunta: "Ordena el código TAC del arreglo lineal: y = arr[i] + 5;",
+        tipo: 'ordenar',
+        bloques: [
+            "t8 = i * 4",
+            "t3 = arr + t8",
+            "t9 = *(t3)",
+            "t4 = t9 + 5",
+            "y = t4"
+        ],
+        correcta: -1
     }
 ];
 
@@ -962,16 +1232,29 @@ function formatOption(text) {
 
 function renderizarPregunta() {
     const pregunta = estado.seleccionadas[estado.indiceActual];
-    
-    // Animación de salida/entrada
     DOM.contenedorPregunta.style.opacity = '0';
     
     setTimeout(() => {
-        DOM.contenedorPregunta.innerHTML = `
-            <div class="question-header">
-                <p class="question-text">${formatQuestion(pregunta.pregunta)}</p>
+        let contenido = `<div class="question-header"><p class="question-text">${formatQuestion(pregunta.pregunta)}</p></div>`;
+        
+        if (pregunta.tipo === 'ordenar') {
+            if (!estado.respuestas[estado.indiceActual]) {
+                estado.respuestas[estado.indiceActual] = [...pregunta.bloques].sort(() => Math.random() - 0.5);
+            }
+            const bloquesRandom = estado.respuestas[estado.indiceActual];
+            const bloquesMostrados = normalizarTAC(bloquesRandom);
+            
+            contenido += `<div class="options-list sortable-list" id="sortable-list">
+                ${bloquesRandom.map((bloque, i) => `
+                    <div class="option sortable-item" draggable="true" data-index="${i}" data-original-tac="${bloque.replace(/"/g, '&quot;')}">
+                        <div style="cursor: grab; margin-right: 15px; color: var(--neon-gold);">≡</div>
+                        <span class="user-ans tac-block">${formatOption(bloquesMostrados[i])}</span>
+                    </div>
+                `).join('')}
             </div>
-            <div class="options-list">
+            <p style="font-size: 0.85rem; color: var(--neon-gold); margin-top: 10px;">* Arrastra los bloques. (Los temporales tX y etiquetas LX se renumerarán automáticamente según su orden lógico para evaluar el trazo correcto).</p>`;
+        } else {
+            contenido += `<div class="options-list">
                 ${pregunta.opciones.map((opt, i) => `
                     <div class="option ${estado.respuestas[estado.indiceActual] === i ? 'selected' : ''}" 
                          onclick="seleccionarRespuesta(${i})">
@@ -979,11 +1262,102 @@ function renderizarPregunta() {
                         <span class="user-ans">${formatOption(opt)}</span>
                     </div>
                 `).join('')}
-            </div>
-        `;
+            </div>`;
+        }
+        
+        DOM.contenedorPregunta.innerHTML = contenido;
+        
+        if (pregunta.tipo === 'ordenar') {
+            initSortable();
+        }
+        
         DOM.contenedorPregunta.style.opacity = '1';
         actualizarUI();
     }, 200);
+}
+
+function initSortable() {
+    const list = document.getElementById('sortable-list');
+    let items = list.querySelectorAll('.sortable-item');
+    let dragItem = null;
+
+    items.forEach(item => {
+        item.addEventListener('dragstart', function(e) {
+            dragItem = item;
+            setTimeout(() => item.style.opacity = '0.5', 0);
+        });
+        item.addEventListener('dragend', function() {
+            setTimeout(() => {
+                if(dragItem) dragItem.style.opacity = '1';
+                dragItem = null;
+                guardarOrdenActual();
+                updateVisibleTAC();
+            }, 0);
+        });
+    });
+
+    list.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        const afterElement = getDragAfterElement(list, e.clientY);
+        const dragging = dragItem;
+        if (dragging) {
+            if (afterElement == null) {
+                list.appendChild(dragging);
+            } else {
+                list.insertBefore(dragging, afterElement);
+            }
+        }
+    });
+}
+
+function getDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('.sortable-item:not([style*="opacity: 0.5"])')];
+    return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+        } else {
+            return closest;
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
+function guardarOrdenActual() {
+    const list = document.getElementById('sortable-list');
+    const newOrder = [...list.querySelectorAll('.sortable-item')].map(item => item.getAttribute('data-original-tac'));
+    estado.respuestas[estado.indiceActual] = newOrder;
+    guardarProgreso();
+}
+
+function updateVisibleTAC() {
+    const list = document.getElementById('sortable-list');
+    if (!list) return;
+    const items = [...list.querySelectorAll('.sortable-item')];
+    const originals = items.map(i => i.getAttribute('data-original-tac'));
+    const n = normalizarTAC(originals);
+    items.forEach((item, index) => {
+        item.querySelector('.user-ans').innerHTML = formatOption(n[index]);
+    });
+}
+
+function normalizarTAC(bloques) {
+    let mapT = {};
+    let tCounter = 1;
+    let mapL = {};
+    let lCounter = 1;
+    
+    return bloques.map(line => {
+        let nl = line.replace(/\bL(?:\d+|_[A-Za-z0-9_]*)\b/g, m => {
+            if (!mapL[m]) mapL[m] = 'L' + (lCounter++);
+            return mapL[m];
+        });
+        nl = nl.replace(/\bt\d+\b/g, m => {
+            if (!mapT[m]) mapT[m] = 't' + (tCounter++);
+            return mapT[m];
+        });
+        return nl;
+    });
 }
 
 window.seleccionarRespuesta = (indice) => {
@@ -1034,7 +1408,22 @@ function completarExamen(conAnimacion = true) {
 
     let aciertos = 0;
     estado.seleccionadas.forEach((p, i) => {
-        if (estado.respuestas[i] === p.correcta) aciertos++;
+        if (p.tipo === 'ordenar') {
+            const arr = estado.respuestas[i];
+            if (arr && Array.isArray(arr) && arr.length === p.bloques.length) {
+                let correct = true;
+                for(let k=0; k<p.bloques.length; k++) {
+                    // Match line by line ignoring whitespace differences
+                    if (arr[k].replace(/\n/g, '').replace(/\s+/g, '') !== p.bloques[k].replace(/\n/g, '').replace(/\s+/g, '')) {
+                        correct = false;
+                        break;
+                    }
+                }
+                if (correct) aciertos++;
+            }
+        } else {
+            if (estado.respuestas[i] === p.correcta) aciertos++;
+        }
     });
 
     const porcentaje = Math.round((aciertos / CONFIG.preguntasExamen) * 100);
@@ -1078,7 +1467,26 @@ function toggleRevision() {
 
 function generarRevision() {
     DOM.listaRevision.innerHTML = estado.seleccionadas.map((p, i) => {
-        const esCorrecta = estado.respuestas[i] === p.correcta;
+        let esCorrecta = false;
+        let revisionAns = '';
+        
+        if (p.tipo === 'ordenar') {
+            const arr = estado.respuestas[i];
+            esCorrecta = arr && Array.isArray(arr) && arr.length === p.bloques.length && arr.every((val, idx) => val.replace(/\n/g, '').replace(/\s+/g, '') === p.bloques[idx].replace(/\n/g, '').replace(/\s+/g, ''));
+            const respActual = arr && Array.isArray(arr) ? normalizarTAC(arr) : [];
+            const correctosNormalizados = normalizarTAC(p.bloques);
+            revisionAns = `<span class="user-ans">Tu respuesta:<br><div style="margin-left:10px;">${respActual.map(r=>formatOption(r)).join('<br>')}</div></span>`;
+            if (!esCorrecta) {
+                revisionAns += `<br><br><span class="correct-ans">Respuesta correcta:<br><div style="margin-left:10px;">${correctosNormalizados.map(r=>formatOption(r)).join('<br>')}</div></span>`;
+            }
+        } else {
+            esCorrecta = estado.respuestas[i] === p.correcta;
+            revisionAns = `<span class="user-ans">Tu respuesta: ${estado.respuestas[i] !== null ? formatOption(p.opciones[estado.respuestas[i]]) : 'No respondida'}</span>`;
+            if (!esCorrecta) {
+                revisionAns += `<br><span class="correct-ans">Respuesta correcta: ${formatOption(p.opciones[p.correcta])}</span>`;
+            }
+        }
+        
         return `
             <div class="revision-item ${esCorrecta ? 'correct' : 'incorrect'}">
                 <div class="status-tag ${esCorrecta ? 'correct' : 'incorrect'}">
@@ -1086,10 +1494,7 @@ function generarRevision() {
                 </div>
                 <div class="revision-q">${formatQuestion(p.pregunta)}</div>
                 <div class="revision-ans">
-                    <span class="user-ans">
-                        Tu respuesta: ${estado.respuestas[i] !== null ? formatOption(p.opciones[estado.respuestas[i]]) : 'No respondida'}
-                    </span>
-                    ${!esCorrecta ? `<br><span class="correct-ans">Respuesta correcta: ${formatOption(p.opciones[p.correcta])}</span>` : ''}
+                    ${revisionAns}
                 </div>
             </div>
         `;
